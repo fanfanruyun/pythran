@@ -128,6 +128,7 @@ def make_extension(python, **extra):
                                cfg.get('compiler', 'cflags').split()],
         "extra_link_args": [str(x) for x in
                             cfg.get('compiler', 'ldflags').split()],
+        "extra_objects": []
     }
 
     if python:
@@ -163,13 +164,20 @@ def make_extension(python, **extra):
 
         # blas dependency
         user_blas = cfg.get('compiler', 'blas')
-        numpy_blas = numpy_sys.get_info(user_blas)
-        # required to cope with atlas missing extern "C"
-        extension['define_macros'].append('PYTHRAN_BLAS_{}'
-                                          .format(user_blas.upper()))
-        extension['libraries'].extend(numpy_blas.get('libraries', []))
-        extension['library_dirs'].extend(numpy_blas.get('library_dirs', []))
-        extension['include_dirs'].extend(numpy_blas.get('include_dirs', []))
+        if user_blas == 'pythran-openblas':
+            # required to cope with atlas missing extern "C"
+            extension['define_macros'].append('PYTHRAN_BLAS_OPENBLAS')
+            import pythran_openblas as openblas
+            extension['include_dirs'].extend(openblas.include_dirs)
+            extension['extra_objects'].append(os.path.join(openblas.library_dir, openblas.static_library))
+        else:
+            numpy_blas = numpy_sys.get_info(user_blas)
+            # required to cope with atlas missing extern "C"
+            extension['define_macros'].append('PYTHRAN_BLAS_{}'
+                                              .format(user_blas.upper()))
+            extension['libraries'].extend(numpy_blas.get('libraries', []))
+            extension['library_dirs'].extend(numpy_blas.get('library_dirs', []))
+            extension['include_dirs'].extend(numpy_blas.get('include_dirs', []))
     finally:
         sys.stdout = old_stdout
 
