@@ -11,7 +11,7 @@ addons:
             - clang-format-3.6
 
 install:
-    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then PYTHON=python; if [ $TRAVIS_PYTHON_VERSION = '2.7' ] ; then $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-559ee44d3343601042b9/pythran_openblas-0.3.6-cp27-cp27mu-linux_x86_64.whl ; else $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-559ee44d3343601042b9/pythran_openblas-0.3.6-cp36-cp36m-linux_x86_64.whl ; fi ; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then PYTHON=python; if [ $TRAVIS_PYTHON_VERSION = '2.7' ] ; then $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-ee4918f2dae56ada3473/pythran_openblas-0.3.6-cp27-cp27mu-linux_x86_64.whl ; else $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-ee4918f2dae56ada3473/pythran_openblas-0.3.6-cp36-cp36m-linux_x86_64.whl ; fi ; fi
     - if [ "$TRAVIS_OS_NAME" = "osx" ]; then if [ $PYTHON = 'python2' ] ; then $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-559ee44d3343601042b9/pythran_openblas-0.3.6-cp27-cp27m-macosx_10_13_x86_64.whl ; else $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-559ee44d3343601042b9/pythran_openblas-0.3.6-cp36-cp36m-macosx_10_13_x86_64.whl ; fi ; fi
     - $PYTHON -m pip install --upgrade pip setuptools wheel six cython
     - $PYTHON -m pip install --only-binary=numpy,scipy -U ply "networkx>=2" colorlog numpy scipy pytest-xdist gast ipython nbval
