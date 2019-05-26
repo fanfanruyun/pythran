@@ -12,7 +12,7 @@ install:
   - "%PYTHON%\\python.exe --version"
   - "%PYTHON%\\python.exe -m pip install --upgrade pip wheel"
   - "%PYTHON%\\python.exe -c \"import wheel.pep425tags as w; print(w.get_supported())\""
-  - "%PYTHON%\\python.exe -m pip install https://ci.appveyor.com/api/buildjobs/y5hpb9no766mwgk1/artifacts/dist/pythran_openblas-0.3.6-cp36-cp36m-win_amd64.whl"
+  - "%PYTHON%\\python.exe -m pip install pythran-openblas"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
   - "%PYTHON%\\python.exe -m pip install numpy"
   - "%PYTHON%\\python.exe -m pip install pytest"

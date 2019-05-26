@@ -44,6 +44,12 @@ namespace types
     {
     }
     template <class OT>
+    none(none<OT, false> const &arg)
+        : T((T)arg), is_none(arg.is_none)
+    {
+    }
+
+    template <class OT>
     none(OT const &arg)
         : none(T(arg))
     {
@@ -165,6 +171,11 @@ namespace types
     none();
     none(none_type const &);
     none(T const &data);
+    template <class T0>
+    none(none<T0, true> const &other)
+        : data((T)other.data), is_none(other.is_none)
+    {
+    }
     bool operator==(none_type const &) const;
     template <class O>
     bool operator==(O const &t) const;

@@ -7,111 +7,111 @@ addons:
             - ubuntu-toolchain-r-test
         packages:
             - g++-5
-            - clang-3.6
+            - clang-3.5
             - clang-format-3.6
 
 install:
-    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then PYTHON=python; if [ $TRAVIS_PYTHON_VERSION = '2.7' ] ; then $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-ee4918f2dae56ada3473/pythran_openblas-0.3.6-cp27-cp27mu-linux_x86_64.whl ; else $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-ee4918f2dae56ada3473/pythran_openblas-0.3.6-cp36-cp36m-linux_x86_64.whl ; fi ; fi
-    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then if [ $PYTHON = 'python2' ] ; then $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-559ee44d3343601042b9/pythran_openblas-0.3.6-cp27-cp27m-macosx_10_13_x86_64.whl ; else $PYTHON -m pip install https://github.com/serge-sans-paille/pythran-openblas/releases/download/untagged-559ee44d3343601042b9/pythran_openblas-0.3.6-cp36-cp36m-macosx_10_13_x86_64.whl ; fi ; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then PYTHON=python; fi
     - $PYTHON -m pip install --upgrade pip setuptools wheel six cython
     - $PYTHON -m pip install --only-binary=numpy,scipy -U ply "networkx>=2" colorlog numpy scipy pytest-xdist gast ipython nbval
+    - $PYTHON -m pip install pythran-openblas
     - $PYTHON setup.py install 1> /dev/null
 
 matrix:
     include:
         - python: 2.7
-          env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
         - python: 3.6
-          env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
 
         - python: 2.7
-          env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
         - python: 3.6
-          env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
 
-        #- python: 2.7
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
-        #- python: 3.6
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
+        - python: 2.7
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
+        - python: 3.6
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[ab]*.py pythran/tests/test_c[b-z]*.py pythran/tests/test_numpy_[a-eg-r]*.py pythran/tests/test_numpy_f[a-t]*.py'
 
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_ca*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_ca*.py'
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_ca*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_ca*.py'
-        #- python: 2.7
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_ca*.py'
-        #- python: 3.6
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_ca*.py'
-        #- python: 2.7
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-DUSE_XSIMD -march=native -fopenmp" TESTCASE='pythran/tests/test_ca*.py'
-        #- python: 3.6
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-DUSE_XSIMD -march=native -fopenmp" TESTCASE='pythran/tests/test_ca*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_ca*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_ca*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_ca*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_ca*.py'
+        - python: 2.7
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_ca*.py'
+        - python: 3.6
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_ca*.py'
+        - python: 2.7
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-DUSE_XSIMD -march=native -fopenmp" TESTCASE='pythran/tests/test_ca*.py'
+        - python: 3.6
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-DUSE_XSIMD -march=native -fopenmp" TESTCASE='pythran/tests/test_ca*.py'
 
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
-        #- python: 2.7
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
-        #- python: 3.6
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
+        - python: 2.7
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
+        - python: 3.6
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[d-m]*.py pythran/tests/test_n[a-t]*.py'
 
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
-        #- python: 2.7
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
-        #- python: 3.6
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
+        - python: 2.7
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
+        - python: 3.6
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_numpy_f[u-z]*.py'
 
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
-        #- python: 2.7
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
-        #- python: 3.6
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
+        - python: 2.7
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
+        - python: 3.6
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_numpy_[s-z]*.py'
 
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_[o-w]*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS=-g TESTCASE='pythran/tests/test_[o-w]*.py'
-        #- python: 2.7
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[o-w]*.py'
-        #- python: 3.6
-        #  env: CC=clang-3.6 CXX=clang++-3.6 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[o-w]*.py'
-        #- python: 2.7
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[o]*.py'
-        #- python: 3.6
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[o]*.py'
-        #- python: 2.7
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[p-w]*.py'
-        #- python: 3.6
-        #  env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[p-w]*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_[o-w]*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS=-g TESTCASE='pythran/tests/test_[o-w]*.py'
+        - python: 2.7
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[o-w]*.py'
+        - python: 3.6
+          env: CC=clang-3.5 CXX=clang++-3.5 CXXFLAGS="-DUSE_XSIMD -march=native" TESTCASE='pythran/tests/test_[o-w]*.py'
+        - python: 2.7
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[o]*.py'
+        - python: 3.6
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[o]*.py'
+        - python: 2.7
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[p-w]*.py'
+        - python: 3.6
+          env: CC=gcc-5 CXX=g++-5 CXXFLAGS="-fopenmp" TESTCASE='pythran/tests/test_[p-w]*.py'
 
-        #- python: 2.7
-        #  env: PYTHRAN_DOC=true
+        - python: 2.7
+          env: PYTHRAN_DOC=true
 
-        #- python: 3.6
-        #  env: PYTHRAN_DOC=true
+        - python: 3.6
+          env: PYTHRAN_DOC=true
 
         - os: osx
           language: generic

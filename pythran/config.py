@@ -165,12 +165,20 @@ def make_extension(python, **extra):
         # blas dependency
         user_blas = cfg.get('compiler', 'blas')
         if user_blas == 'pythran-openblas':
-            # required to cope with atlas missing extern "C"
-            extension['define_macros'].append('PYTHRAN_BLAS_OPENBLAS')
-            import pythran_openblas as openblas
-            extension['include_dirs'].extend(openblas.include_dirs)
-            extension['extra_objects'].append(os.path.join(openblas.library_dir, openblas.static_library))
-        else:
+            try:
+                import pythran_openblas as openblas
+                # required to cope with atlas missing extern "C"
+                extension['define_macros'].append('PYTHRAN_BLAS_OPENBLAS')
+                extension['include_dirs'].extend(openblas.include_dirs)
+                extension['extra_objects'].append(os.path.join(openblas.library_dir,
+                                                               openblas.static_library))
+            except ImportError:
+                logger.warn("Failed to find 'pythran-openblas' package. "
+                            "Please install it or change the compiler.blas setting. "
+                            "Defaulting to 'blas'")
+                user_blas = 'blas'
+
+        if user_blas != 'pythran-openblas':
             numpy_blas = numpy_sys.get_info(user_blas)
             # required to cope with atlas missing extern "C"
             extension['define_macros'].append('PYTHRAN_BLAS_{}'
